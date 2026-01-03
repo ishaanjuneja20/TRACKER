@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNLEASH THE BEAST - CAMPAIGN DASHBOARD</title>
+    
+    <link rel="icon" href="https://assets.dragoart.com/images/9853_501/how-to-draw-monster-energy-logo-monster-logo_5e4c957cc94ac6.91425601_43460_3_4.jpg" type="image/jpg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --monster-green: #19e619; /* The radioactive green */
+            --monster-white: #ffffff;
+            --font-stack: 'Oswald', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            /* Official Texture + Dark Overlay */
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://catportal.monsterenergy.com/images/2025/texture-gradient.png');
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+            background-attachment: fixed;
+            
+            color: var(--monster-white);
+            font-family: var(--font-stack);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- DUAL FLOATING CANS --- */
+        .can-float {
+            position: fixed;
+            bottom: -40px;
+            width: 300px;
+            opacity: 0.9;
+            z-index: 0;
+            pointer-events: none;
+            filter: drop-shadow(0 0 40px rgba(0,0,0,0.9));
+            transition: transform 0.3s ease;
+        }
+        .can-right { right: -60px; transform: rotate(-10deg); }
+        .can-left { left: -60px; transform: rotate(10deg); }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(var(--r)); }
+            50% { transform: translateY(-15px) rotate(var(--r)); }
+            100% { transform: translateY(0px) rotate(var(--r)); }
+        }
+        .can-right { --r: -10deg; animation: float 6s ease-in-out infinite; }
+        .can-left { --r: 10deg; animation: float 6s ease-in-out infinite 0.5s; }
+
+        .dashboard {
+            width: 100%;
+            max-width: 650px;
+            padding-bottom: 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- OFFICIAL LOGO --- */
+        .header-logo-img {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 200px; /* Adjusted size for the text logo */
+            filter: drop-shadow(0 0 20px rgba(25, 230, 25, 0.6));
+        }
+
+        /* --- CLAW CARD DESIGN --- */
+        .claw-card {
+            background: rgba(5, 5, 5, 0.9); 
+            border: 2px solid #333;
+            border-left: 4px solid var(--monster-green);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+            box-shadow: 0 0 15px rgba(25, 230, 25, 0.1), 0 20px 40px rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- HEADERS --- */
+        .money-display {
+            font-size: 4.5rem;
+            color: var(--monster-green);
+            /* Massive Glow Effect */
+            text-shadow: 0 0 10px var(--monster-green), 0 0 40px var(--monster-green);
+            line-height: 1;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-track {
+            background: #000;
+            height: 25px;
+            width: 100%;
+            transform: skewX(-20deg);
+            border: 2px solid #222;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            background: var(--monster-green);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 25px var(--monster-green);
+        }
+
+        /* --- INPUTS --- */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            background: #000;
+            border: 2px solid #222;
+            /* Text Color is now GREEN */
+            color: var(--monster-green);
+            font-family: var(--font-stack);
+            font-size: 2rem;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            outline: none;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(25, 230, 25, 0.5);
+        }
+
+        input:focus {
+            border-color: var(--monster-green);
+            box-shadow: 0 0 30px var(--monster-green) inset; 
+        }
+
+        /* --- DAILY STATS --- */
+        .daily-stat-box {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--monster-green);
+            margin-top: 10px;
+            border-top: 1px dashed #333;
+            padding-top: 10px;
+        }
+
+        .daily-val { 
+            color: var(--monster-green); 
+            font-weight: bold; 
+            text-shadow: 0 0 15px rgba(25, 230, 25, 0.4); 
+        }
+
+        /* --- STATUS TEXT --- */
+        #clipStatus {
+            text-align: center; 
+            font-size: 0.8rem; 
+            margin-top: 5px; 
+            /* Fixed Green */
+            color: var(--monster-green) !important;
+            text-shadow: 0 0 5px rgba(25, 230, 25, 0.3);
+        }
+
+        /* --- BUTTON --- */
+        .btn {
+            background: var(--monster-green);
+            color: black;
+            font-family: var(--font-stack);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 2px solid var(--monster-green);
+            width: 100%;
+            padding: 18px;
+            cursor: pointer;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            transition: all 0.2s;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover { 
+            box-shadow: 0 0 60px var(--monster-green); 
+            transform: scale(1.02); 
+            color: white;
+            text-shadow: 0 0 10px black;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        /* --- GRAPH TITLES --- */
+        .graph-title {
+            color: var(--monster-green); 
+            margin: 0 0 15px 0; 
+            border-bottom: 2px solid #222; 
+            padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(25, 230, 25, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <img src="https://web-assests.monsterenergy.com/mnst/8a02f363-00cb-426c-a5c7-f8e0c312512f.webp" class="can-float can-left" alt="Monster Can Left">
+    <img src="https://web-assests.monsterenergy.com/mnst/68c062c3-e188-48d1-a3e4-c9d48fc484de.webp" class="can-float can-right" alt="Monster Can Right">
+
+    <div class="dashboard">
+        
+        <img src="https://www.monsterenergy.com/img/home/monster-logo.png" class="header-logo-img" alt="Monster Energy Logo">
+
+        <div class="claw-card" style="text-align: center;">
+            <div style="color: #888; font-size: 0.8rem; letter-spacing: 2px;">TOTAL EARNINGS</div>
+            <div class="money-display" id="moneyDisplay">$0.00</div>
+            
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; color: #666; font-size: 0.8rem;">
+                <span>START</span>
+                <span style="color: var(--monster-green);">TARGET: $1,800</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="claw-card">
+                <label>Clips Today</label>
+                <input type="number" id="clipsInput" placeholder="0" oninput="liveUpdate()">
+                <div id="clipStatus">
+                    TARGET: 10 CLIPS
+                </div>
+            </div>
+            
+            <div class="claw-card">
+                <label>Total Views</label>
+                <input type="number" id="viewsInput" placeholder="Total" oninput="liveUpdate()">
+                
+                <div class="daily-stat-box">
+                    <div>Gained Today:</div>
+                    <div class="daily-val" id="dailyViewsDisplay">0</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="saveLog()">LOG DAILY PROGRESS</button>
+
+        <div class="claw-card" style="margin-top: 30px;">
+            <h3 class="graph-title">DAILY GRIND (CLIPS)</h3>
+            <canvas id="clipsChart"></canvas>
+        </div>
+        <div class="claw-card">
+            <h3 class="graph-title">VELOCITY TRACKER (VIEWS)</h3>
+            <canvas id="viewsChart"></canvas>
+        </div>
+        <div class="claw-card">
+            <h3 class="graph-title">BOUNTY COLLECTED ($)</h3>
+            <canvas id="moneyChart"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+        // CONFIG
+        const TARGET = 1800;
+        const RATE = 1250 / 1000000; // 0.00125
+        
+        // ELEMENT REFS
+        const els = {
+            money: document.getElementById('moneyDisplay'),
+            bar: document.getElementById('progressBar'),
+            clips: document.getElementById('clipsInput'),
+            views: document.getElementById('viewsInput'),
+            dailyDisp: document.getElementById('dailyViewsDisplay'),
+            clipStatus: document.getElementById('clipStatus')
+        };
+
+        let viewsChartInstance, moneyChartInstance, clipsChartInstance;
+
+        // --- INIT ---
+        window.onload = () => {
+            loadData();
+            renderCharts();
+        };
+
+        // --- CALCULATIONS ---
+        function liveUpdate() {
+            const currentTotalViews = parseInt(els.views.value) || 0;
+            const currentClips = parseInt(els.clips.value) || 0;
+
+            // Money Calc
+            const money = currentTotalViews * RATE;
+            els.money.innerText = `$${money.toFixed(2)}`;
+            const pct = (money / TARGET) * 100;
+            els.bar.style.width = `${Math.min(pct, 100)}%`;
+
+            // Daily Views Calc
+            const yesterdayTotal = getYesterdayTotal();
+            const dailyViews = Math.max(0, currentTotalViews - yesterdayTotal);
+            const dailyEarnings = dailyViews * RATE;
+            
+            els.dailyDisp.innerText = `+${dailyViews.toLocaleString()} ($${dailyEarnings.toFixed(2)})`;
+        }
+
+        // --- DATA HANDLING ---
+        function getHistory() {
+            return JSON.parse(localStorage.getItem('monsterHistoryV3') || '{}');
+        }
+
+        function getYesterdayTotal() {
+            const history = getHistory();
+            const dates = Object.keys(history).sort();
+            const today = new Date().toLocaleDateString('en-CA');
+            
+            for(let i = dates.length - 1; i >= 0; i--) {
+                if(dates[i] !== today) {
+                    return history[dates[i]].totalViews || 0;
+                }
+            }
+            return 0; 
+        }
+
+        function loadData() {
+            const history = getHistory();
+            const today = new Date().toLocaleDateString('en-CA');
+
+            if(history[today]) {
+                els.clips.value = history[today].clips;
+                els.views.value = history[today].totalViews;
+            } else {
+                const lastTotal = getYesterdayTotal();
+                if(lastTotal > 0) els.views.value = lastTotal;
+            }
+            liveUpdate();
+        }
+
+        function saveLog() {
+            const history = getHistory();
+            const today = new Date().toLocaleDateString('en-CA');
+            
+            history[today] = {
+                clips: parseInt(els.clips.value) || 0,
+                totalViews: parseInt(els.views.value) || 0
+            };
+
+            localStorage.setItem('monsterHistoryV3', JSON.stringify(history));
+            
+            // BUTTON CLICK EFFECT (SWAP COLORS)
+            const btn = document.querySelector('.btn');
+            const originalText = btn.innerText;
+            
+            // Swap: Black BG / Green Text
+            btn.style.background = "black";
+            btn.style.color = "#19e619"; 
+            btn.innerText = "LOG SAVED.";
+            
+            setTimeout(() => {
+                // Revert: Green BG / Black Text
+                btn.style.background = "#19e619";
+                btn.style.color = "black";
+                btn.innerText = originalText;
+            }, 1000);
+
+            renderCharts();
+        }
+
+        // --- CHARTING ENGINE ---
+        function renderCharts() {
+            const history = getHistory();
+            const dates = Object.keys(history).sort().slice(-7); 
+
+            const labels = [];
+            const viewData = [];
+            const moneyData = [];
+            const clipsData = [];
+            
+            dates.forEach((date, index) => {
+                const todayData = history[date];
+                const todayTotal = todayData.totalViews;
+                let prevTotal = 0;
+                
+                if(index > 0) {
+                    prevTotal = history[dates[index-1]].totalViews;
+                }
+
+                const dailyGain = Math.max(0, todayTotal - prevTotal);
+                const dailyMoney = dailyGain * RATE;
+                
+                labels.push(date.slice(5)); // MM-DD
+                viewData.push(dailyGain);
+                moneyData.push(dailyMoney);
+                clipsData.push(todayData.clips);
+            });
+
+            if(viewsChartInstance) viewsChartInstance.destroy();
+            if(moneyChartInstance) moneyChartInstance.destroy();
+            if(clipsChartInstance) clipsChartInstance.destroy();
+
+            // COMMON CHART STYLING
+            const commonOptions = {
+                responsive: true,
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: 'rgba(25, 230, 25, 0.1)' }, 
+                        ticks: { color: '#19e619', font: { family: 'Oswald' } } 
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#19e619', font: { family: 'Oswald' } } 
+                    }
+                },
+                plugins: { legend: { display: false } }
+            };
+
+            clipsChartInstance = new Chart(document.getElementById('clipsChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: labels, datasets: [{ data: clipsData, backgroundColor: '#19e619', barThickness: 15 }] },
+                options: commonOptions
+            });
+
+            viewsChartInstance = new Chart(document.getElementById('viewsChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: labels, datasets: [{ data: viewData, backgroundColor: '#19e619', barThickness: 15 }] },
+                options: commonOptions
+            });
+
+            // NO WHITE BORDER
+            moneyChartInstance = new Chart(document.getElementById('moneyChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: labels, datasets: [{ data: moneyData, backgroundColor: '#19e619', barThickness: 15 }] },
+                options: commonOptions
+            });
+        }
+    </script>
+</body>
+</html>
