@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNLEASH THE BEAST - CAMPAIGN DASHBOARD</title>
+    <title>28-DAY KICK SPRINT</title>
     
     <link rel="icon" href="https://assets.dragoart.com/images/9853_501/how-to-draw-monster-energy-logo-monster-logo_5e4c957cc94ac6.91425601_43460_3_4.jpg" type="image/jpg">
 
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
-            --monster-green: #19e619; /* The radioactive green */
+            --monster-green: #19e619;
+            --monster-glow: rgba(25, 230, 25, 0.5);
             --monster-white: #ffffff;
+            --tiktok-color: #be00fe;
             --font-stack: 'Oswald', sans-serif;
         }
 
         body {
             background-color: #000000;
-            /* Official Texture + Dark Overlay */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://catportal.monsterenergy.com/images/2025/texture-gradient.png');
             background-repeat: no-repeat;
             background-position: center top;
             background-size: cover;
             background-attachment: fixed;
-            
             color: var(--monster-white);
             font-family: var(--font-stack);
             display: flex;
@@ -32,11 +33,10 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            position: relative;
             overflow-x: hidden;
         }
 
-        /* --- DUAL FLOATING CANS --- */
+        /* --- CANS --- */
         .can-float {
             position: fixed;
             bottom: -40px;
@@ -47,98 +47,51 @@
             filter: drop-shadow(0 0 40px rgba(0,0,0,0.9));
             transition: transform 0.3s ease;
         }
-        .can-right { right: -60px; transform: rotate(-10deg); }
-        .can-left { left: -60px; transform: rotate(10deg); }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(var(--r)); }
-            50% { transform: translateY(-15px) rotate(var(--r)); }
-            100% { transform: translateY(0px) rotate(var(--r)); }
-        }
-        .can-right { --r: -10deg; animation: float 6s ease-in-out infinite; }
-        .can-left { --r: 10deg; animation: float 6s ease-in-out infinite 0.5s; }
+        .can-right { right: -60px; transform: rotate(-10deg); --r: -10deg; animation: float 6s ease-in-out infinite; }
+        .can-left { left: -60px; transform: rotate(10deg); --r: 10deg; animation: float 6s ease-in-out infinite 0.5s; }
+        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(var(--r)); } 50% { transform: translateY(-15px) rotate(var(--r)); } }
 
         .dashboard {
             width: 100%;
-            max-width: 650px;
-            padding-bottom: 100px;
+            max-width: 850px;
+            padding-bottom: 50px;
             position: relative;
             z-index: 1;
         }
 
-        /* --- OFFICIAL LOGO --- */
+        /* --- LOGO --- */
         .header-logo-img {
             display: block;
             margin: 0 auto 20px auto;
-            width: 200px; /* Adjusted size for the text logo */
+            width: 220px;
             filter: drop-shadow(0 0 20px rgba(25, 230, 25, 0.6));
         }
 
-        /* --- CLAW CARD DESIGN --- */
+        /* --- CARDS --- */
         .claw-card {
-            background: rgba(5, 5, 5, 0.9); 
+            background: rgba(5, 5, 5, 0.85);
             border: 2px solid #333;
             border-left: 4px solid var(--monster-green);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
             position: relative;
             clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
             box-shadow: 0 0 15px rgba(25, 230, 25, 0.1), 0 20px 40px rgba(0,0,0,0.8);
             backdrop-filter: blur(10px);
         }
 
-        /* --- HEADERS --- */
-        .money-display {
-            font-size: 4.5rem;
-            color: var(--monster-green);
-            /* Massive Glow Effect */
-            text-shadow: 0 0 10px var(--monster-green), 0 0 40px var(--monster-green);
-            line-height: 1;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-
-        /* --- PROGRESS BAR --- */
-        .progress-track {
-            background: #000;
-            height: 25px;
-            width: 100%;
-            transform: skewX(-20deg);
-            border: 2px solid #222;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            background: var(--monster-green);
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 25px var(--monster-green);
-        }
+        /* --- GRIDS --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
 
         /* --- INPUTS --- */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        label {
-            color: #888;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
+        label { color: #888; font-size: 0.8rem; letter-spacing: 2px; display: block; margin-bottom: 8px; text-transform: uppercase; }
+        
         input {
             background: #000;
             border: 2px solid #222;
-            /* Text Color is now GREEN */
             color: var(--monster-green);
             font-family: var(--font-stack);
-            font-size: 2rem;
+            font-size: 1.8rem;
             width: 100%;
             text-align: center;
             padding: 10px 0;
@@ -147,306 +100,515 @@
             font-weight: bold;
             text-shadow: 0 0 5px rgba(25, 230, 25, 0.5);
         }
+        input:focus { border-color: var(--monster-green); box-shadow: 0 0 30px var(--monster-green) inset; }
 
-        input:focus {
-            border-color: var(--monster-green);
-            box-shadow: 0 0 30px var(--monster-green) inset; 
-        }
-
-        /* --- DAILY STATS --- */
-        .daily-stat-box {
+        /* --- CLIP CONTROLS --- */
+        .clip-control-box {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            padding: 20px;
             text-align: center;
-            font-size: 1.2rem;
-            color: var(--monster-green);
-            margin-top: 10px;
-            border-top: 1px dashed #333;
-            padding-top: 10px;
+            margin-bottom: 20px;
+        }
+        select {
+            background: #000; color: white; border: 2px solid #333;
+            font-family: var(--font-stack); font-size: 1.2rem; width: 100%; padding: 12px;
+            text-transform: uppercase; margin-bottom: 15px; outline: none;
+        }
+        .btn-group { display: flex; gap: 10px; }
+        
+        /* SHARED BUTTON STYLES */
+        .btn-action { 
+            font-family: var(--font-stack); 
+            font-size: 1.5rem; 
+            border: 2px solid var(--monster-green); 
+            cursor: pointer; 
+            transition: 0.1s; 
+            padding: 15px; 
+            background: var(--monster-green); 
+            color: black; 
+            font-weight: bold;
         }
 
-        .daily-val { 
-            color: var(--monster-green); 
-            font-weight: bold; 
-            text-shadow: 0 0 15px rgba(25, 230, 25, 0.4); 
-        }
-
-        /* --- STATUS TEXT --- */
-        #clipStatus {
-            text-align: center; 
-            font-size: 0.8rem; 
-            margin-top: 5px; 
-            /* Fixed Green */
+        /* THE FLASH EFFECT CLASS (Applied via JS) */
+        .btn-flash {
+            background-color: #000 !important;
             color: var(--monster-green) !important;
-            text-shadow: 0 0 5px rgba(25, 230, 25, 0.3);
+            box-shadow: inset 0 0 20px var(--monster-green) !important;
+            transform: scale(0.98);
+        }
+        
+        .btn-add { 
+            flex-grow: 1; 
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); 
+        }
+        .btn-add:hover { box-shadow: 0 0 30px var(--monster-green); }
+        
+        .btn-sub { 
+            width: 60px; 
+            clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px); 
+        }
+        .btn-sub:hover { box-shadow: 0 0 15px var(--monster-green); }
+
+        .stats-readout { display: flex; justify-content: space-around; margin-top: 20px; border-top: 1px dashed #333; padding-top: 15px; }
+        .stat-num { font-size: 2.5rem; color: white; font-weight: bold; line-height: 1; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+        /* --- TITLES & BARS --- */
+        .section-title { color: var(--monster-green); border-bottom: 2px solid #222; margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .prog-container { margin-bottom: 15px; }
+        .prog-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; color: #aaa; letter-spacing: 1px; }
+        .prog-track { background: #000; height: 15px; width: 100%; border: 1px solid #333; transform: skewX(-20deg); }
+        .prog-fill { height: 100%; width: 0%; background: var(--monster-green); box-shadow: 0 0 15px var(--monster-green); transition: width 0.5s ease; }
+
+        /* --- MOTIVATIONAL MESSAGES --- */
+        .prog-msg {
+            font-size: 0.8rem;
+            color: var(--monster-green);
+            margin-top: 5px;
+            text-transform: uppercase;
+            font-style: italic;
+            text-align: right;
+            transition: all 0.3s;
+            text-shadow: 0 0 5px rgba(25, 230, 25, 0.4);
+            font-weight: bold;
         }
 
-        /* --- BUTTON --- */
-        .btn {
-            background: var(--monster-green);
-            color: black;
-            font-family: var(--font-stack);
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        .platform-tag { font-size: 0.7rem; color: #fff; background: #222; padding: 3px 8px; border-radius: 2px; margin-right: 8px; font-weight: bold; }
+        .tag-ig { border-left: 3px solid #E1306C; }
+        .tag-tk { border-left: 3px solid var(--tiktok-color); }
+        .tag-yt { border-left: 3px solid #FF0000; }
+
+        /* --- CREDITS --- */
+        .credit-box {
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(10, 46, 10, 0.8) 100%);
             border: 2px solid var(--monster-green);
-            width: 100%;
-            padding: 18px;
-            cursor: pointer;
-            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-            transition: all 0.2s;
+        }
+        .credit-count { font-size: 3.5rem; color: var(--monster-green); text-shadow: 0 0 30px var(--monster-green); font-weight: bold; line-height: 1; }
+        
+        .btn-redeem {
+            background: transparent; border: 2px solid #444; color: #444;
+            font-family: var(--font-stack); font-weight: bold; padding: 12px 25px;
+            cursor: not-allowed; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+        }
+        .btn-redeem.active { border-color: var(--monster-green); color: var(--monster-green); cursor: pointer; box-shadow: 0 0 15px var(--monster-green) inset; }
+        .btn-redeem.active:hover { background: var(--monster-green); color: black; box-shadow: 0 0 30px var(--monster-green); }
+
+        /* --- SAVE BUTTON --- */
+        .btn-log {
+            background: var(--monster-green);
+            color: black; 
+            font-family: var(--font-stack);
+            font-size: 1.2rem; font-weight: 700; text-transform: uppercase; 
+            border: 2px solid var(--monster-green);
+            width: 100%; padding: 15px; cursor: pointer; margin-top: 25px; transition: 0.1s;
             letter-spacing: 2px;
-            margin-bottom: 10px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
+        .btn-log:hover { box-shadow: 0 0 30px var(--monster-green); transform: scale(1.02); }
+        
+        /* --- GRAPH CONTAINER --- */
+        .chart-container { position: relative; height: 180px; width: 100%; }
 
-        .btn:hover { 
-            box-shadow: 0 0 60px var(--monster-green); 
-            transform: scale(1.02); 
-            color: white;
-            text-shadow: 0 0 10px black;
-        }
-        .btn:active { transform: scale(0.98); }
-
-        /* --- GRAPH TITLES --- */
-        .graph-title {
-            color: var(--monster-green); 
-            margin: 0 0 15px 0; 
-            border-bottom: 2px solid #222; 
-            padding-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 1.2rem;
-            text-shadow: 0 0 10px rgba(25, 230, 25, 0.3);
-        }
+        #dailyStatus { text-align: center; font-size: 1rem; margin-top: 15px; color: #666; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-    <img src="https://web-assests.monsterenergy.com/mnst/8a02f363-00cb-426c-a5c7-f8e0c312512f.webp" class="can-float can-left" alt="Monster Can Left">
-    <img src="https://web-assests.monsterenergy.com/mnst/68c062c3-e188-48d1-a3e4-c9d48fc484de.webp" class="can-float can-right" alt="Monster Can Right">
+    <img src="https://web-assests.monsterenergy.com/mnst/8a02f363-00cb-426c-a5c7-f8e0c312512f.webp" class="can-float can-left">
+    <img src="https://web-assests.monsterenergy.com/mnst/68c062c3-e188-48d1-a3e4-c9d48fc484de.webp" class="can-float can-right">
 
     <div class="dashboard">
         
-        <img src="https://www.monsterenergy.com/img/home/monster-logo.png" class="header-logo-img" alt="Monster Energy Logo">
+        <img src="https://www.monsterenergy.com/img/home/monster-logo.png" class="header-logo-img">
 
-        <div class="claw-card" style="text-align: center;">
-            <div style="color: #888; font-size: 0.8rem; letter-spacing: 2px;">TOTAL EARNINGS</div>
-            <div class="money-display" id="moneyDisplay">$0.00</div>
-            
-            <div class="progress-track">
-                <div class="progress-fill" id="progressBar"></div>
+        <div class="claw-card credit-box">
+            <div>
+                <div class="credit-label">Monster Credits</div>
+                <div class="credit-count" id="creditDisplay">0</div>
+                <div style="font-size: 0.7rem; color: #888; margin-top:5px;">EARN 1 PER 3-DAY STREAK (10+ CLIPS)</div>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-top: 8px; color: #666; font-size: 0.8rem;">
-                <span>START</span>
-                <span style="color: var(--monster-green);">TARGET: $1,800</span>
+            <button class="btn-redeem" id="redeemBtn" onclick="redeemCredit()">Redeem Reward</button>
+        </div>
+
+        <div class="claw-card">
+            <div class="section-title">MISSION STATUS (28 DAYS)</div>
+            
+            <div class="prog-container">
+                <div class="prog-label"><span>TIME ELAPSED</span><span id="dayText">Day 1 / 28</span></div>
+                <div class="prog-track"><div class="prog-fill" id="dayBar"></div></div>
+                <div class="prog-msg" id="msgTime">THE CLOCK IS TICKING.</div>
+            </div>
+
+            <div class="prog-container">
+                <div class="prog-label"><span>KICK CLIPS (Target: 30)</span><span id="kickText">0 / 30</span></div>
+                <div class="prog-track"><div class="prog-fill" id="kickBar"></div></div>
+                <div class="prog-msg" id="msgKick">WAKE THE BEAST. START CLIPPING.</div>
+            </div>
+            
+            <div style="height: 1px; background: #333; margin: 25px 0;"></div>
+
+            <div class="prog-container">
+                <div class="prog-label"><span><span class="platform-tag tag-ig">INSTAGRAM</span> FOLLOWERS (Target: 350)</span><span id="igFolText">0</span></div>
+                <div class="prog-track"><div class="prog-fill" id="igFolBar"></div></div>
+                <div class="prog-msg" id="msgIgFol">BUILD THE ARMY.</div>
+            </div>
+            <div class="prog-container">
+                <div class="prog-label"><span><span class="platform-tag tag-ig">INSTAGRAM</span> VIEWS (Target: 450k)</span><span id="igViewText">0</span></div>
+                <div class="prog-track"><div class="prog-fill" id="igViewBar"></div></div>
+                <div class="prog-msg" id="msgIgView">GET MORE EYES.</div>
+            </div>
+
+            <div class="prog-container">
+                <div class="prog-label"><span><span class="platform-tag tag-tk">TIKTOK</span> FOLLOWERS (Target: 350)</span><span id="tkFolText">0</span></div>
+                <div class="prog-track"><div class="prog-fill" id="tkFolBar"></div></div>
+                <div class="prog-msg" id="msgTkFol">RECRUIT THEM.</div>
+            </div>
+            <div class="prog-container">
+                <div class="prog-label"><span><span class="platform-tag tag-tk">TIKTOK</span> VIEWS (Target: 450k)</span><span id="tkViewText">0</span></div>
+                <div class="prog-track"><div class="prog-fill" id="tkViewBar"></div></div>
+                <div class="prog-msg" id="msgTkView">GO VIRAL OR GO HOME.</div>
+            </div>
+
+            <div class="prog-container">
+                <div class="prog-label"><span><span class="platform-tag tag-yt">YOUTUBE</span> FOLLOWERS (Target: 350)</span><span id="ytFolText">0</span></div>
+                <div class="prog-track"><div class="prog-fill" id="ytFolBar"></div></div>
+                <div class="prog-msg" id="msgYtFol">GROW THE CHANNEL.</div>
+            </div>
+            <div class="prog-container">
+                <div class="prog-label"><span><span class="platform-tag tag-yt">YOUTUBE</span> VIEWS (Target: 450k)</span><span id="ytViewText">0</span></div>
+                <div class="prog-track"><div class="prog-fill" id="ytViewBar"></div></div>
+                <div class="prog-msg" id="msgYtView">DOMINATE THE ALGORITHM.</div>
             </div>
         </div>
 
-        <div class="grid">
-            <div class="claw-card">
-                <label>Clips Today</label>
-                <input type="number" id="clipsInput" placeholder="0" oninput="liveUpdate()">
-                <div id="clipStatus">
-                    MIN: 3 | TARGET: 5 CLIPS
-                </div>
-            </div>
+        <div class="claw-card">
+            <div class="section-title">DAILY LOG</div>
             
-            <div class="claw-card">
-                <label>Total Views</label>
-                <input type="number" id="viewsInput" placeholder="Total" oninput="liveUpdate()">
+            <div class="clip-control-box">
+                <label>LOG A COMPLETED CLIP</label>
+                <select id="clipType">
+                    <option value="normal">NORMAL CLIP</option>
+                    <option value="kick">KICK CLIP</option>
+                </select>
                 
-                <div class="daily-stat-box">
-                    <div>Gained Today:</div>
-                    <div class="daily-val" id="dailyViewsDisplay">0</div>
+                <div class="btn-group">
+                    <button class="btn-action btn-sub" onclick="adjustClip(-1, this)">-</button>
+                    <button class="btn-action btn-add" onclick="adjustClip(1, this)">+ LOG CLIP</button>
                 </div>
+
+                <div class="stats-readout">
+                    <div class="stat-item">
+                        <div class="stat-num" id="dispTotal">0</div>
+                        <div class="stat-label">Total Today</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" id="dispKick" style="color:var(--monster-green);">0</div>
+                        <div class="stat-label">Kick Clips</div>
+                    </div>
+                </div>
+                <div id="dailyStatus">MIN: 3 | TARGET: 10+</div>
             </div>
+
+            <br>
+            
+            <label style="color:#E1306C; margin-top:10px;">INSTAGRAM TOTALS</label>
+            <div class="grid-2">
+                <div><label>Views</label><input type="number" id="igViews" placeholder="0"></div>
+                <div><label>Followers</label><input type="number" id="igFols" placeholder="0"></div>
+            </div>
+
+            <label style="color:var(--tiktok-color); margin-top:10px;">TIKTOK TOTALS</label>
+            <div class="grid-2">
+                <div><label>Views</label><input type="number" id="tkViews" placeholder="0"></div>
+                <div><label>Followers</label><input type="number" id="tkFols" placeholder="0"></div>
+            </div>
+
+            <label style="color:#FF0000; margin-top:10px;">YOUTUBE TOTALS</label>
+            <div class="grid-2">
+                <div><label>Views</label><input type="number" id="ytViews" placeholder="0"></div>
+                <div><label>Followers</label><input type="number" id="ytFols" placeholder="0"></div>
+            </div>
+
+            <button class="btn-log" onclick="saveLog(this)">SAVE ALL STATS</button>
         </div>
 
-        <button class="btn" onclick="saveLog()">LOG DAILY PROGRESS</button>
-
-        <div class="claw-card" style="margin-top: 30px;">
-            <h3 class="graph-title">DAILY GRIND (CLIPS)</h3>
-            <canvas id="clipsChart"></canvas>
-        </div>
         <div class="claw-card">
-            <h3 class="graph-title">VELOCITY TRACKER (VIEWS)</h3>
-            <canvas id="viewsChart"></canvas>
-        </div>
-        <div class="claw-card">
-            <h3 class="graph-title">BOUNTY COLLECTED ($)</h3>
-            <canvas id="moneyChart"></canvas>
+            <div class="section-title">DAILY OUTPUT (CLIPS)</div>
+            <div class="chart-container">
+                <canvas id="streakChart"></canvas>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // CONFIG
-        const TARGET = 1800;
-        const RATE = 1250 / 1000000; // 0.00125
-        
-        // ELEMENT REFS
-        const els = {
-            money: document.getElementById('moneyDisplay'),
-            bar: document.getElementById('progressBar'),
-            clips: document.getElementById('clipsInput'),
-            views: document.getElementById('viewsInput'),
-            dailyDisp: document.getElementById('dailyViewsDisplay'),
-            clipStatus: document.getElementById('clipStatus')
-        };
+        // --- CONFIG ---
+        const START_DATE = "2026-01-10"; 
+        const DAYS_TARGET = 28;
+        const CLIP_PERFECT = 10;
+        const TARGETS = { kickClips: 30, views: 450000, followers: 350 };
 
-        let viewsChartInstance, moneyChartInstance, clipsChartInstance;
+        // --- STATE ---
+        let currentTotal = 0;
+        let currentKick = 0;
+        let redeemedCredits = 0;
 
         // --- INIT ---
         window.onload = () => {
-            loadData();
-            renderCharts();
+            try { loadData(); updateUI(); } 
+            catch (e) { console.error(e); }
         };
 
-        // --- CALCULATIONS ---
-        function liveUpdate() {
-            const currentTotalViews = parseInt(els.views.value) || 0;
-            const currentClips = parseInt(els.clips.value) || 0;
-
-            // Money Calc
-            const money = currentTotalViews * RATE;
-            els.money.innerText = `$${money.toFixed(2)}`;
-            const pct = (money / TARGET) * 100;
-            els.bar.style.width = `${Math.min(pct, 100)}%`;
-
-            // Daily Views Calc
-            const yesterdayTotal = getYesterdayTotal();
-            const dailyViews = Math.max(0, currentTotalViews - yesterdayTotal);
-            const dailyEarnings = dailyViews * RATE;
-            
-            els.dailyDisp.innerText = `+${dailyViews.toLocaleString()} ($${dailyEarnings.toFixed(2)})`;
+        function getData() {
+            try { return JSON.parse(localStorage.getItem('monsterSprint28') || '{}'); } 
+            catch (e) { return {}; }
+        }
+        function getRedeemed() {
+            return parseInt(localStorage.getItem('monsterRedeemed') || '0');
         }
 
-        // --- DATA HANDLING ---
-        function getHistory() {
-            return JSON.parse(localStorage.getItem('monsterHistoryV3') || '{}');
+        // --- BUTTON FLASH HELPER ---
+        function triggerBtnEffect(btn) {
+            if(!btn) return;
+            btn.classList.add('btn-flash');
+            setTimeout(() => {
+                btn.classList.remove('btn-flash');
+            }, 300); // 300ms flash duration
         }
 
-        function getYesterdayTotal() {
-            const history = getHistory();
-            const dates = Object.keys(history).sort();
-            const today = new Date().toLocaleDateString('en-CA');
-            
-            for(let i = dates.length - 1; i >= 0; i--) {
-                if(dates[i] !== today) {
-                    return history[dates[i]].totalViews || 0;
+        // --- LOGIC ---
+        function adjustClip(amount, btnElement) {
+            triggerBtnEffect(btnElement); // Trigger Flash
+            const type = document.getElementById('clipType').value;
+            if (amount > 0) {
+                currentTotal++;
+                if(type === 'kick') currentKick++;
+            } else {
+                if(currentTotal > 0) {
+                    currentTotal--;
+                    if(type === 'kick' && currentKick > 0) currentKick--;
                 }
             }
-            return 0; 
+            saveLog();
+        }
+
+        function saveLog(btnElement) {
+            if(btnElement) triggerBtnEffect(btnElement); // Trigger Flash
+            
+            const history = getData();
+            const today = new Date().toLocaleDateString('en-CA');
+
+            history[today] = {
+                totalClips: currentTotal,
+                kickClips: currentKick,
+                igViews: parseInt(document.getElementById('igViews').value) || 0,
+                igFols: parseInt(document.getElementById('igFols').value) || 0,
+                tkViews: parseInt(document.getElementById('tkViews').value) || 0,
+                tkFols: parseInt(document.getElementById('tkFols').value) || 0,
+                ytViews: parseInt(document.getElementById('ytViews').value) || 0,
+                ytFols: parseInt(document.getElementById('ytFols').value) || 0,
+            };
+
+            localStorage.setItem('monsterSprint28', JSON.stringify(history));
+            updateUI();
         }
 
         function loadData() {
-            const history = getHistory();
+            const history = getData();
             const today = new Date().toLocaleDateString('en-CA');
-
+            
             if(history[today]) {
-                els.clips.value = history[today].clips;
-                els.views.value = history[today].totalViews;
+                const d = history[today];
+                currentTotal = d.totalClips || 0;
+                currentKick = d.kickClips || 0;
+                
+                document.getElementById('igViews').value = d.igViews || 0;
+                document.getElementById('igFols').value = d.igFols || 0;
+                document.getElementById('tkViews').value = d.tkViews || 0;
+                document.getElementById('tkFols').value = d.tkFols || 0;
+                document.getElementById('ytViews').value = d.ytViews || 0;
+                document.getElementById('ytFols').value = d.ytFols || 0;
             } else {
-                const lastTotal = getYesterdayTotal();
-                if(lastTotal > 0) els.views.value = lastTotal;
-            }
-            liveUpdate();
-        }
-
-        function saveLog() {
-            const history = getHistory();
-            const today = new Date().toLocaleDateString('en-CA');
-            
-            history[today] = {
-                clips: parseInt(els.clips.value) || 0,
-                totalViews: parseInt(els.views.value) || 0
-            };
-
-            localStorage.setItem('monsterHistoryV3', JSON.stringify(history));
-            
-            // BUTTON CLICK EFFECT (SWAP COLORS)
-            const btn = document.querySelector('.btn');
-            const originalText = btn.innerText;
-            
-            // Swap: Black BG / Green Text
-            btn.style.background = "black";
-            btn.style.color = "#19e619"; 
-            btn.innerText = "LOG SAVED.";
-            
-            setTimeout(() => {
-                // Revert: Green BG / Black Text
-                btn.style.background = "#19e619";
-                btn.style.color = "black";
-                btn.innerText = originalText;
-            }, 1000);
-
-            renderCharts();
-        }
-
-        // --- CHARTING ENGINE ---
-        function renderCharts() {
-            const history = getHistory();
-            const dates = Object.keys(history).sort().slice(-7); 
-
-            const labels = [];
-            const viewData = [];
-            const moneyData = [];
-            const clipsData = [];
-            
-            dates.forEach((date, index) => {
-                const todayData = history[date];
-                const todayTotal = todayData.totalViews;
-                let prevTotal = 0;
-                
-                if(index > 0) {
-                    prevTotal = history[dates[index-1]].totalViews;
+                const dates = Object.keys(history).sort();
+                if(dates.length > 0) {
+                    const last = history[dates[dates.length-1]];
+                    document.getElementById('igViews').value = last.igViews || 0;
+                    document.getElementById('igFols').value = last.igFols || 0;
+                    document.getElementById('tkViews').value = last.tkViews || 0;
+                    document.getElementById('tkFols').value = last.tkFols || 0;
+                    document.getElementById('ytViews').value = last.ytViews || 0;
+                    document.getElementById('ytFols').value = last.ytFols || 0;
                 }
+            }
+            redeemedCredits = getRedeemed();
+        }
 
-                const dailyGain = Math.max(0, todayTotal - prevTotal);
-                const dailyMoney = dailyGain * RATE;
-                
-                labels.push(date.slice(5)); // MM-DD
-                viewData.push(dailyGain);
-                moneyData.push(dailyMoney);
-                clipsData.push(todayData.clips);
+        // --- 5% INCREMENT MOTIVATION ---
+        function getMotivation(val, target) {
+            const pct = Math.min(100, (val / target) * 100);
+            
+            if (pct >= 100) return "TARGET DESTROYED. DOMINANCE ESTABLISHED.";
+            if (pct >= 95) return "UNLEASH THE BEAST.";
+            if (pct >= 90) return "ONE LAST SURGE.";
+            if (pct >= 85) return "FINISH THEM.";
+            if (pct >= 80) return "KILLER INSTINCT: ACTIVATED.";
+            if (pct >= 75) return "SMELL THE BLOOD.";
+            if (pct >= 70) return "SEPARATE FROM THE PACK.";
+            if (pct >= 65) return "EYES ON THE PRIZE.";
+            if (pct >= 60) return "FEEL THE ADRENALINE.";
+            if (pct >= 55) return "DOWNHILL FROM HERE.";
+            if (pct >= 50) return "HALFWAY POINT. NO MERCY.";
+            if (pct >= 45) return "GRINDING GEARS. GO FASTER.";
+            if (pct >= 40) return "ALMOST HALFWAY. PUSH.";
+            if (pct >= 35) return "PICK UP THE PACE.";
+            if (pct >= 30) return "DON'T LOOK BACK.";
+            if (pct >= 25) return "BUILDING MOMENTUM.";
+            if (pct >= 20) return "YOU'RE JUST GETTING STARTED.";
+            if (pct >= 15) return "LOCK IN. FOCUS.";
+            if (pct >= 10) return "FIRST STEPS. KEEP MOVING.";
+            if (pct >= 5) return "THE ENGINE IS COLD. WARM IT UP.";
+            return "WAKE THE BEAST.";
+        }
+
+        function updateUI() {
+            const history = getData();
+            const dates = Object.keys(history).sort();
+            
+            document.getElementById('dispTotal').innerText = currentTotal;
+            document.getElementById('dispKick').innerText = currentKick;
+            
+            const stat = document.getElementById('dailyStatus');
+            if(currentTotal >= 10) {
+                stat.innerText = "🔥 BEAST MODE ACTIVATED";
+                stat.style.color = "#19e619";
+                stat.style.fontWeight = "bold";
+                stat.style.textShadow = "0 0 10px #19e619";
+            } else if (currentTotal >= 3) {
+                stat.innerText = "✅ MINIMUM MET. PUSH FOR 10!";
+                stat.style.color = "white";
+                stat.style.fontWeight = "normal";
+                stat.style.textShadow = "none";
+            } else {
+                stat.innerText = "MIN: 3 | TARGET: 10+";
+                stat.style.color = "#555";
+                stat.style.fontWeight = "normal";
+                stat.style.textShadow = "none";
+            }
+
+            let sumKick = 0;
+            let currentIGView = 0, currentIGFol = 0;
+            let currentTKView = 0, currentTKFol = 0;
+            let currentYTView = 0, currentYTFol = 0;
+
+            dates.forEach(d => sumKick += (history[d].kickClips || 0));
+            
+            if(dates.length > 0) {
+                const last = history[dates[dates.length-1]];
+                currentIGView = last.igViews || 0; currentIGFol = last.igFols || 0;
+                currentTKView = last.tkViews || 0; currentTKFol = last.tkFols || 0;
+                currentYTView = last.ytViews || 0; currentYTFol = last.ytFols || 0;
+            }
+
+            let creditsEarned = 0;
+            let streak = 0;
+            dates.forEach(d => {
+                if((history[d].totalClips || 0) >= CLIP_PERFECT) {
+                    streak++;
+                    if(streak === 3) { creditsEarned++; streak = 0; }
+                } else { streak = 0; }
             });
+            const availableCredits = Math.max(0, creditsEarned - redeemedCredits);
+            document.getElementById('creditDisplay').innerText = availableCredits;
+            const rBtn = document.getElementById('redeemBtn');
+            if(availableCredits > 0) { rBtn.classList.add('active'); rBtn.innerText = "REDEEM REWARD"; } 
+            else { rBtn.classList.remove('active'); rBtn.innerText = "NO CREDITS"; }
 
-            if(viewsChartInstance) viewsChartInstance.destroy();
-            if(moneyChartInstance) moneyChartInstance.destroy();
-            if(clipsChartInstance) clipsChartInstance.destroy();
+            // --- PROGRESS & MESSAGES ---
+            const start = new Date(START_DATE);
+            const now = new Date();
+            const diff = Math.ceil((now - start) / (1000 * 60 * 60 * 24));
+            const dayNum = Math.max(1, Math.min(diff, 28));
+            
+            updateBar('dayBar', 'dayText', 'msgTime', dayNum, DAYS_TARGET, "Day " + dayNum + " / 28", getMotivation(dayNum, DAYS_TARGET));
+            updateBar('kickBar', 'kickText', 'msgKick', sumKick, TARGETS.kickClips, null, getMotivation(sumKick, TARGETS.kickClips));
+            
+            updateBar('igFolBar', 'igFolText', 'msgIgFol', currentIGFol, TARGETS.followers, null, getMotivation(currentIGFol, TARGETS.followers));
+            updateBar('igViewBar', 'igViewText', 'msgIgView', currentIGView, TARGETS.views, formatNum(currentIGView) + " / 450k", getMotivation(currentIGView, TARGETS.views));
+            
+            updateBar('tkFolBar', 'tkFolText', 'msgTkFol', currentTKFol, TARGETS.followers, null, getMotivation(currentTKFol, TARGETS.followers));
+            updateBar('tkViewBar', 'tkViewText', 'msgTkView', currentTKView, TARGETS.views, formatNum(currentTKView) + " / 450k", getMotivation(currentTKView, TARGETS.views));
+            
+            updateBar('ytFolBar', 'ytFolText', 'msgYtFol', currentYTFol, TARGETS.followers, null, getMotivation(currentYTFol, TARGETS.followers));
+            updateBar('ytViewBar', 'ytViewText', 'msgYtView', currentYTView, TARGETS.views, formatNum(currentYTView) + " / 450k", getMotivation(currentYTView, TARGETS.views));
 
-            // COMMON CHART STYLING
-            const commonOptions = {
+            renderAllCharts(dates, history);
+        }
+
+        function updateBar(barId, textId, msgId, val, target, customText = null, msgText = "") {
+            const pct = Math.min(100, (val / target) * 100);
+            document.getElementById(barId).style.width = pct + "%";
+            document.getElementById(textId).innerText = customText ? customText : `${val} / ${target}`;
+            
+            const msgEl = document.getElementById(msgId);
+            msgEl.innerText = msgText;
+            
+            if(val >= target) {
+                document.getElementById(barId).style.background = "#fff";
+            } else {
+                document.getElementById(barId).style.background = "#19e619";
+            }
+        }
+
+        function formatNum(n) {
+            if(n >= 1000) return (n/1000).toFixed(1) + 'k';
+            return n;
+        }
+
+        function redeemCredit() {
+            const available = parseInt(document.getElementById('creditDisplay').innerText);
+            if(available > 0) {
+                redeemedCredits++;
+                localStorage.setItem('monsterRedeemed', redeemedCredits);
+                updateUI();
+                alert("REWARD REDEEMED! TREAT YOURSELF.");
+            }
+        }
+
+        // --- CHARTS ---
+        let streakChart;
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        }
+
+        function renderAllCharts(dates, history) {
+            const displayDates = dates.slice(-7);
+            const labels = displayDates.map(d => formatDate(d));
+            const dataClips = displayDates.map(d => history[d].totalClips || 0);
+
+            const commonOpts = {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
-                    y: { 
-                        beginAtZero: true,
-                        grid: { color: 'rgba(25, 230, 25, 0.1)' }, 
-                        ticks: { color: '#19e619', font: { family: 'Oswald' } } 
-                    },
-                    x: { 
-                        grid: { display: false }, 
-                        ticks: { color: '#19e619', font: { family: 'Oswald' } } 
-                    }
+                    y: { beginAtZero: true, grid: { color: '#222' }, ticks: { color: '#888' } },
+                    x: { grid: { display: false }, ticks: { color: '#888', font: {size: 9} } }
                 },
                 plugins: { legend: { display: false } }
             };
 
-            clipsChartInstance = new Chart(document.getElementById('clipsChart').getContext('2d'), {
+            // RENDER STREAK
+            if(streakChart) streakChart.destroy();
+            streakChart = new Chart(document.getElementById('streakChart').getContext('2d'), {
                 type: 'bar',
-                data: { labels: labels, datasets: [{ data: clipsData, backgroundColor: '#19e619', barThickness: 15 }] },
-                options: commonOptions
-            });
-
-            viewsChartInstance = new Chart(document.getElementById('viewsChart').getContext('2d'), {
-                type: 'bar',
-                data: { labels: labels, datasets: [{ data: viewData, backgroundColor: '#19e619', barThickness: 15 }] },
-                options: commonOptions
-            });
-
-            // NO WHITE BORDER
-            moneyChartInstance = new Chart(document.getElementById('moneyChart').getContext('2d'), {
-                type: 'bar',
-                data: { labels: labels, datasets: [{ data: moneyData, backgroundColor: '#19e619', barThickness: 15 }] },
-                options: commonOptions
+                data: {
+                    labels: labels,
+                    datasets: [{ data: dataClips, backgroundColor: '#19e619', barThickness: 20 }]
+                },
+                options: commonOpts
             });
         }
     </script>
